@@ -1,7 +1,7 @@
 # wl-phisher - Web-Login Phisher
 Author : zexceed12300@xenz
 
-Version : 0.1.0(Beta)
+Version : 1.2(Beta)
 
 Facebook : https://www.facebook.com/profile.php?id=100011531026694
 
@@ -12,7 +12,6 @@ Github : https://github.com/zexceed12300
 -- If there are suggestions / issues / bugs / etc. PM I am on Facebook
 
 # How To Install / Cara install
-
 1. Update or install package and library
 
    -- In Linux
