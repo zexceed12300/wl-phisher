@@ -204,10 +204,6 @@ def get_parameters():
         if args.update:
             echo("\m[!] Cant try -c/--custom with -upt/--update. You can try one!")
             echo("\m[!] Exit!")
-        if args.custom:
-            echo("\m[!] Cant try -c/--custom with -c/--custom. You can try one!")
-            echo("\m[!] Exit!")
-            sys.exit()
         if args.help:
             echo("\m[!] Cant try -c/--custom with -h/--help. You can try one!")
             echo("\m[!] Exit!")
@@ -220,13 +216,6 @@ def get_parameters():
             echo("\m[!] Cant try -upt/--update with -u/--url. You can try one!")
             echo("\m[!] Exit!")
             sys.exit()
-        if args.update:
-            echo("\m[!] Cant try -upt/--update with -upt/--update. You can try one!")
-            echo("\m[!] Exit!")
-            sys.exit()
-        if args.update:
-            echo("\m[!] Cant try -upt/--update with -upt/--update. You can try one!")
-            echo("\m[!] Exit!")
         if args.custom:
             echo("\m[!] Cant try -upt/--update with -c/--custom. You can try one!")
             echo("\m[!] Exit!")
@@ -238,14 +227,6 @@ def get_parameters():
         update()
 
     elif args.url:
-        if args.url:
-            echo("\m[!] Cant try -u/--url with -u/--url. You can try one!")
-            echo("\m[!] Exit!")
-            sys.exit()
-        if args.update:
-            echo("\m[!] Cant try -u/--url with -upt/--update. You can try one!")
-            echo("\m[!] Exit!")
-            sys.exit()
         if args.update:
             echo("\m[!] Cant try -u/--url with -upt/--update. You can try one!")
             echo("\m[!] Exit!")
