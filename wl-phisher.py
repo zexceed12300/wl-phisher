@@ -204,10 +204,6 @@ def get_parameters():
         if args.update:
             echo("\m[!] Cant try -c/--custom with -upt/--update. You can try one!")
             echo("\m[!] Exit!")
-        if args.help:
-            echo("\m[!] Cant try -c/--custom with -h/--help. You can try one!")
-            echo("\m[!] Exit!")
-            sys.exit()
         echo("\h[+] This Features Not Available Now(coming soon)\d")
         echo("\m[!] Exit!\d")
 
@@ -220,10 +216,6 @@ def get_parameters():
             echo("\m[!] Cant try -upt/--update with -c/--custom. You can try one!")
             echo("\m[!] Exit!")
             sys.exit()
-        if args.help:
-            echo("\m[!] Cant try -upt/--update with -h/--help. You can try one!")
-            echo("\m[!] Exit!")
-            sys.exit()
         update()
 
     elif args.url:
@@ -232,10 +224,6 @@ def get_parameters():
             echo("\m[!] Exit!")
         if args.custom:
             echo("\m[!] Cant try -u/--url with -c/--custom. You can try one!")
-            echo("\m[!] Exit!")
-            sys.exit()
-        if args.help:
-            echo("\m[!] Cant try -u/--url with -h/--help. You can try one!")
             echo("\m[!] Exit!")
             sys.exit()
         cloning()
