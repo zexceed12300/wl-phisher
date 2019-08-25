@@ -182,7 +182,7 @@ def usage():
 \h[+] Developer\d  \y:\d \hXenz\d\y@\mZexceed12300\d
 \h[+] Contact me\d \y:\d \chttps://www.facebook.com/profile.php?id=100011531026694\d
 \h[+] Github\d     \y:\d \chttps://github.com/zexceed12300\d
-\h[+] Version\d    \y:\d \h1.1 (Beta)\d
+\h[+] Version\d    \y:\d \h1.2 (Beta)\d
 \h_________________________________________________________\d               
                """)
 usage()
